@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Root Shell</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
             margin: 0;
             padding: 0;
@@ -15,26 +21,41 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             overflow: hidden;
             background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="black"/><path d="M10,10L90,90M90,10L10,90" stroke="rgba(255,0,0,0.1)" stroke-width="1"/></svg>');
         }
         
         .ascii-title {
-            font-size: 10px;
+            font-size: clamp(4px, 1.5vw, 10px);
             line-height: 1;
             white-space: pre;
             text-align: center;
-            margin-bottom: 50px;
+            margin-bottom: 5vh;
             color: #0f0;
             text-shadow: 0 0 5px #0f0;
+            width: 100%;
+            max-width: 100%;
+            overflow-x: auto;
+        }
+        
+        /* Mobil cihazlar için ASCII başlık alternatifi */
+        .mobile-title {
+            display: none;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 5vh;
+            color: #0f0;
+            text-shadow: 0 0 10px #0f0;
         }
         
         .skull-container {
             position: relative;
-            width: 250px;
-            height: 250px;
+            width: min(250px, 80vw);
+            height: min(250px, 80vw);
             perspective: 800px;
+            margin: 0 auto;
         }
         
         .skull {
@@ -42,8 +63,8 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 150px;
-            height: 150px;
+            width: min(150px, 50vw);
+            height: min(150px, 50vw);
             animation: float 3s ease-in-out infinite alternate, rotate 20s linear infinite;
         }
         
@@ -111,7 +132,7 @@
         .symbol {
             position: absolute;
             color: #ff0000;
-            font-size: 24px;
+            font-size: clamp(16px, 5vw, 24px);
             opacity: 0.7;
             text-shadow: 0 0 10px #ff0000;
             animation: flicker 3s infinite alternate;
@@ -130,8 +151,8 @@
         .blood-drop {
             position: absolute;
             background-color: #ff0000;
-            width: 10px;
-            height: 10px;
+            width: min(10px, 3vw);
+            height: min(10px, 3vw);
             border-radius: 50% 50% 50% 0;
             transform: rotate(45deg);
             animation: blood-drip 4s linear infinite;
@@ -218,7 +239,7 @@
             position: fixed;
             bottom: 20px;
             left: 20px;
-            font-size: 14px;
+            font-size: clamp(10px, 3vw, 14px);
             color: #0f0;
             opacity: 0.7;
         }
@@ -246,9 +267,9 @@
         .matrix-column {
             position: absolute;
             top: -100%;
-            width: 20px;
+            width: clamp(10px, 3vw, 20px);
             color: #ff0000;
-            font-size: 16px;
+            font-size: clamp(8px, 2.5vw, 16px);
             text-align: center;
             animation: matrix-fall linear infinite;
         }
@@ -298,10 +319,52 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AkEBDEVgpJD7gAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAHbElEQVRo3u2aaXBV1RXHf+e+l4QkJIGELUDYl7BjWMIqIBVBKkJV1CpjW7VVa0fGqdqxLtWO2qk6ta0dWkdbnVq1FbUsFgUEF0SKQNgJW0ISBLKQkIS8vHfP6Yf73ruPkPdCXsKH/mfeTN67795z/nf5n/8590lSVT7PEPmcQwQRRBBBBBFEEEEEEUQQQQQRRBBBBBFEEEEEEUQQQQQRRBBBBBFEEEEEEUQQQQTxfwj5tB2ISPqkSZOeKCgoWJCWlhZTWVl5bO/evY/v2LHjvs76iMgDwHdE5Amgzn/9YeAHqvpCT/0Skd8Bk1V1Xt/evRcUFRXNzsjIiK2qqjq+b9++x7dv3/69rvwTVe2xIyLyGHATMNk5d9w5d9w5d8I5d8I5V+qcK3XOlQGlwCTgMeB7nfQzHhgJvCEi8SLyLWABMBx4Q0QSu+NXRMYDo4A3RCRBRJaKyEJgBPCGiCR05p+q9sgBvgLcCxQCCUAckBD6HgfEA/HAQGAJsLOTvlYDPwOagK8BDwLHgGXAz4HGbvq1GvgpUAd8HXgAOA4sB34GNHTmX6/eOCIik4FfALOBWuBV4HfOuQ+cc9XOuWrnXI1zrto5V+2cqwaOALOAX4rIlE66vwzIBl4C0oEZwF+BPwFZwKXd9OsyIAd4EUgDZgJ/Af4MZAOXdebfGT2RRGQocDewCDgFPAE87JwrP4NtLPBDYCnwT1W9MuzZD4A7gQbgIVV9KOzZncAPgEbgYVV9MOzZHcD3gSbgEVV9IOzZ7cD3gGbgUVW9P+zZUuA7QAvwmKreF/ZsCbAMcMDjqnpv2LPFwDLnXIuIPKGq94Q9WwQsV9UWEXlSVe8Ke7YQWKGqrSLylKreCT0gkYhkAncBNwMHgV8Dv1XVujPY9gG+CdwBvK+qc8OeXQbcBbQCv1LVX4Y9mwvcDTjgN6r687Bnc4B7AAf8VlXvDXs2G7gXEOB3qnpP2LNZwH2AAL9X1bvDns0E7gciwB9U9a6wZzOA+wEH/FFV7wx7Nh24H1Dgj6p6R9izacADQAT4k6reHvZsKvAgEAGeVtVlYc+mAA8BEeBpVb0t7Nlk4GEgCjyjqreGPZsEPAJEgWdV9ZbQs7MmkYjkA3cA1wP7gF8Cf1DVxjPYpgI3ArcCh1R1RtizccAdQCuwSlVXhj0bC9wJtAGrVfWnYc/GAHcBbcAaVf1J2LPRwN1AG/Csqt4d9mwUcA/QBjynqj8OezYSuBdoB55X1R+FPRsB/AhoB15Q1R+GPRsO/BhoB15U1R+EPRsG/ARoB15S1e+HPRsKPAi0Ay+r6m1hz4YADwFtwCuqemvYs8HAw0Ab8Kqq3hL2bBDwCBADvKaqN4c9GwisAmKB11X1prBnA4DVQCzwhqreGPZsALAGiAPeVNUbQs/OmEQiUgTcBlwLfAQ8BDyjqm1nsM0GbgGuAT5W1clhz0YCtwLXAQdUdULYsxHAbcD1wEFVHR/2rAi4HbgBOKSq48KeFQK3AzcCh1V1bNizAuA7wE3AEVW9JOxZPnAHcDNwVFXHhD3LA+4EbgGOqeroEJmAXOAu4FbgmKqOCnuWA9wN3AYcV9WRYT9nA/cAy4ETqjoi7FkWcC9wB3BSVYeHPcsE7gPuBE6p6rCwZxnA/cAy4JSqDg17lg78BPgucFpVh4Q9SwN+CiwHTqvq4LBnqcDPgO8BFao6KOxZCvBz4PtApaoODHuWDPwC+AFQpaoD/GcRVe3yAOYDrwMKvA/cCGR0w3YO8CpQA7wHLAaSw57PAV4BaoH3geuBtLBnM4GXgTrgA+AGIDXs2XTgRaAe+BC4EUgJezYVeAFoAD4CbgKSw55NAp4HGoGPgZuBpLBnE4DngCbgAHALkBj2bBzwLNAMHARuBRLCno0BngGagUPAbUB82LNRwNNAC3AYuB2IC3s2EngKaAWOAHcAsWHPLgGeJLTIAXcCMWHPCoEngDbgKHAXEB32bDjwONAOHAPuBqLCnhUAjwJtwHHgHiAy7Fk+8AjQDpwA7gUiQs+6JJGIJIrI9SLyFvAWMBRYCcxQ1StU9ZUzEU5EYkTkWhF5E9gCDAFWATNVdZ6qvhyWbNEicq2IbAa2AoXAamCWqs5V1ZfCyCYicpWIbAK2A8OANcBsVZ2jqi+GkU1E5EoR2QjsAIYDzwBzVHW2qr4QRjYRkStEZAOwExgBPAfMVdVZqvp8GNlERC4XkfXALmAk8Dwwz/drXRjZRESWiMg6YDcwCngBmK+qM1X1uTCyiYgsEpG1wB5gNPAiMF9VZ6jqs2FkExFZKCJrgL3AGOAlYIGqTlfVZ8LIJiKyQERWA/uAscDLwEJVnaaqfwsjm4jIfBFZBewHxgGvAItUdaqqPhNGNhGReSKyEjgAjAdeAxar6hRVfTpEtk5LKBGZCnwDuAqoAP4GrFHVPd0hkIhMAa4BrgYqgb8Da1V1dxdsJwNXA9cClcA/gHWquqsLtpOAq4DrgCrgn8B6Vd3ZBduJwJXA9UA18C9gg6ru6ILtBGApcANQA/wbeE5Vt3fBdjywFLgRqAU2As+r6rYu2I4DlgA3AXXAC8Dzqrq1C7ZjgSXATUA98CLwgqpu6YLtGGAxcDPQALwEvKiqm7tgOxpYDNwCNAIvAy+p6qYu2I4CFgG3Ak3AK8DLqrqxC7YjgUXAbUAz8CrwiqpuOIPt/wCJj3HtxbKqhAAAAABJRU5ErkJggg==');
+            background-image: url('data:image/png;base64,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');
             opacity: 0.05;
             z-index: -1;
             pointer-events: none;
+        }
+        
+        /* Mobil cihazlar için medya sorguları */
+        @media (max-width: 768px) {
+            .ascii-title {
+                display: none;
+            }
+            
+            .mobile-title {
+                display: block;
+            }
+            
+            .skull-container {
+                width: 80vw;
+                height: 80vw;
+            }
+            
+            .skull {
+                width: 50vw;
+                height: 50vw;
+            }
+            
+            .terminal-text {
+                font-size: 12px;
+            }
+        }
+        
+        /* Çok küçük ekranlar için ek ayarlamalar */
+        @media (max-width: 480px) {
+            .skull-container {
+                width: 90vw;
+                height: 90vw;
+            }
+            
+            .skull {
+                width: 60vw;
+                height: 60vw;
+            }
+            
+            .terminal-text {
+                font-size: 10px;
+            }
         }
     </style>
 </head>
@@ -317,6 +380,9 @@
  | | \ \  | |_| | | |_| | | |_            ____) | | | | | |  __/ | | | |  _  | (__  | (_) | | | | | | |
  |_|  \_\  \___/   \___/   \__|          |_____/  |_| |_|  \___| |_| |_| (_)  \___|  \___/  |_| |_| |_|
     </div>
+    
+    <!-- Mobil cihazlar için alternatif başlık -->
+    <div class="mobile-title glitch">ROOT Shell</div>
     
     <div class="skull-container">
         <div class="spinner">
@@ -360,19 +426,40 @@
     </div>
     
     <script>
+        // Ekran boyutunu kontrol et ve ASCII başlığı göster/gizle
+        function checkScreenSize() {
+            const asciiTitle = document.querySelector('.ascii-title');
+            const mobileTitle = document.querySelector('.mobile-title');
+            
+            if (window.innerWidth <= 768) {
+                asciiTitle.style.display = 'none';
+                mobileTitle.style.display = 'block';
+            } else {
+                asciiTitle.style.display = 'block';
+                mobileTitle.style.display = 'none';
+            }
+        }
+        
+        // Sayfa yüklendiğinde ve ekran boyutu değiştiğinde kontrol et
+        window.addEventListener('load', checkScreenSize);
+        window.addEventListener('resize', checkScreenSize);
+        
         // Rastgele glitch efekti
         setInterval(() => {
             const title = document.querySelector('.ascii-title');
+            const mobileTitle = document.querySelector('.mobile-title');
             title.classList.toggle('glitch');
+            mobileTitle.classList.toggle('glitch');
             setTimeout(() => {
                 title.classList.toggle('glitch');
+                mobileTitle.classList.toggle('glitch');
             }, 200);
         }, 3000);
         
         // Matrix benzeri arka plan efekti
         const matrixBg = document.getElementById('matrix-bg');
         const characters = "01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン";
-        const columnCount = 30;
+        const columnCount = Math.min(30, Math.floor(window.innerWidth / 20)); // Ekran genişliğine göre sütun sayısını ayarla
         
         for (let i = 0; i < columnCount; i++) {
             const column = document.createElement('div');
@@ -391,8 +478,10 @@
             matrixBg.appendChild(column);
         }
         
-        // Kan damlası efekti
+        // Kan damlası efekti - mobil cihazlar için daha az damla
         const bloodContainer = document.getElementById('blood-container');
+        const isMobile = window.innerWidth <= 768;
+        const dropInterval = isMobile ? 500 : 300; // Mobil cihazlarda daha az sıklıkta
         
         function createBloodDrop() {
             const drop = document.createElement('div');
@@ -402,11 +491,13 @@
             bloodContainer.appendChild(drop);
             
             setTimeout(() => {
-                bloodContainer.removeChild(drop);
+                if (bloodContainer.contains(drop)) {
+                    bloodContainer.removeChild(drop);
+                }
             }, 5000);
         }
         
-        setInterval(createBloodDrop, 300);
+        setInterval(createBloodDrop, dropInterval);
         
         // Matrix animasyonu için CSS ekleme
         const style = document.createElement('style');
@@ -417,6 +508,28 @@
             }
         `;
         document.head.appendChild(style);
+        
+// Performans optimizasyonu için mobil cihazlarda animasyon sayısını azalt
+        if (isMobile) {
+            // Mobil cihazlarda daha az sembol göster
+            const symbols = document.querySelectorAll('.symbol');
+            for (let i = 4; i < symbols.length; i++) {
+                symbols[i].style.display = 'none';
+            }
+            
+            // Mobil cihazlarda daha az matrix sütunu
+            const matrixColumns = document.querySelectorAll('.matrix-column');
+            for (let i = Math.floor(matrixColumns.length / 2); i < matrixColumns.length; i++) {
+                if (matrixColumns[i].parentNode) {
+                    matrixColumns[i].parentNode.removeChild(matrixColumns[i]);
+                }
+            }
+        }
+        
+        // Ekran yönü değiştiğinde yeniden düzenle
+        window.addEventListener('orientationchange', function() {
+            setTimeout(checkScreenSize, 300);
+        });
     </script>
 </body>
 </html>
